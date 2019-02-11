@@ -40,9 +40,10 @@ app.post('/signUp', async (req, res) => {
   const {name, gender, email, phone, address, school, registrationId, password} = req.body;
   
   const user = new Parse.User();
-  user.set('username', name);
-  user.set('gender', gender);
+  user.set('name', name);
+  user.set('username', email);
   user.set('email', email);
+  user.set('gender', gender);
   user.set('phone', phone);
   user.set('address', address);
   user.set('school', school);
@@ -51,18 +52,23 @@ app.post('/signUp', async (req, res) => {
 
   try{
     const response = await user.signUp();
-    res.json({
-      success : true,
-      profile : response});
+    res.json({success : true, profile : response});
   }
-  catch(error){
-    console.log(error.message)
-    res.json({
-    success : false,
-    error : error.message})
-  }
+  catch(error){res.json({success : false, error : error.message})}
 })
 
+
+app.post('/signIn', async (req, res) => {
+  const {username, password} = req.body;
+
+  try{
+  const profile = await Parse.User.logIn(username, password);
+  res.json({success: true, profile});
+  }
+  catch(error){
+    res.json({success: false, error: error.message})
+  }
+})
 var port = process.env.PORT || 1337;
 var httpServer = require('http').createServer(app);
 httpServer.listen(port, function () {
