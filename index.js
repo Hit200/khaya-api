@@ -4,6 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const uuidv4 = require('uuid/v4');
 const request = require('superagent');
+const { calculateOverallRating } = require('./parseHelpers');
 
 const databaseUri = 'mongodb://localhost:27017/khaya-parse'; // process.env.DATABASE_URI || process.env.MONGODB_URI;
 
@@ -131,13 +132,15 @@ app.put('/rate/:id/:stars', async (req, res) => {
       const ratings = await property.get('ratings');
       let ratingCount = await ratings[`${stars}`];
       ratingCount += 1; // increment ratingCount by 1
+      ratings[`${stars}`] += 1; // for overall rating calculation
 
       request // update ratings object via REST call
         .put(url)
         .set('Content-Type', 'application/json')
         .set('X-Parse-Application-id', 'parse-khaya-app-ID')
         .send({
-          [`ratings.${stars}`]: ratingCount
+          [`ratings.${stars}`]: ratingCount,
+          overallRating: calculateOverallRating(ratings)
         })
         .then(response => res.json({ success: true }))
         .catch(error => res.json({ success: false, error: error.message }));
