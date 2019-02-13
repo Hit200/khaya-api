@@ -2,6 +2,7 @@ const express = require('express');
 const ParseServer = require('parse-server').ParseServer;
 const path = require('path');
 const bodyParser = require('body-parser');
+const uuidv4 = require('uuid/v4');
 
 const databaseUri = 'mongodb://localhost:27017/khaya-parse' // process.env.DATABASE_URI || process.env.MONGODB_URI;
 
@@ -30,11 +31,6 @@ app.use(mountPath, api);
 // Middleware
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({extended: true}));
-
-// Parse Server plays nicely with the rest of your web routes
-app.get('/', function (req, res) {
-	res.status(200).send('I dream of being a website.  Please star the parse-server repo on GitHub!');
-});
 
 app.post('/signUp', async (req, res) => {
   const {name, gender, email, phone, address, school, registrationId, password} = req.body;
@@ -69,8 +65,36 @@ app.post('/signIn', async (req, res) => {
     res.json({success: false, error: error.message})
   }
 })
-var port = process.env.PORT || 1337;
-var httpServer = require('http').createServer(app);
+
+app.post('/newProperty', async (req, res) => {
+  const {address, features, sharing, media, room, description, owner } = req.body;
+
+  const Properties = Parse.Object.extend('Properties');
+  const property = new Properties();
+
+  property.save({
+   owner,
+   description,
+   address,
+   features,
+   sharing,
+   verified : false,
+   media,
+   room,
+   ratings : [0, 0, 0, 0, 0],
+   overallRating : 0
+  })
+  .then((property) => res.json({success : true, id : property.id}))
+  .catch((error) => {
+    console.error(error)
+    return res.json({success : false})
+  })
+})
+
+
+
+const port = process.env.PORT || 1337;
+const httpServer = require('http').createServer(app);
 httpServer.listen(port, function () {
 	console.log('parse-server-example running on port ' + port + '.');
 });
