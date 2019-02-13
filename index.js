@@ -147,8 +147,6 @@ app.put('/rate/:id/:stars', async (req, res) => {
 
 const port = process.env.PORT || 1337;
 const httpServer = require('http').createServer(app);
-httpServer.listen(port, function() {
-  console.log('parse-server-example running on port ' + port + '.');
-});
+httpServer.listen(port, () => console.log('parse-server-example running on port ' + port + '.'));
 
 ParseServer.createLiveQueryServer(httpServer);
