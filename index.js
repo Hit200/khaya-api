@@ -61,6 +61,7 @@ app.post('/signIn', async (req, res) => {
 
   try {
     const profile = await Parse.User.logIn(username, password);
+    const user = await Parse.User.become(profile.sessionToken);
     res.json({ success: true, profile });
   } catch (error) {
     res.json({ success: false, error: error.message });
@@ -73,30 +74,35 @@ app.post('/newProperty', async (req, res) => {
   const Properties = Parse.Object.extend('Properties');
   const property = new Properties();
 
-  property
-    .save({
-      owner,
-      description,
-      address,
-      features,
-      sharing,
-      verified: false,
-      media,
-      room,
-      ratings: {
-        '5': 0,
-        '4': 0,
-        '3': 0,
-        '2': 0,
-        '1': 0
-      },
-      overallRating: 0
-    })
-    .then(property => res.json({ success: true, id: property.id }))
-    .catch(error => {
-      console.error(error);
-      return res.json({ success: false, error: error.message });
-    });
+  const currentUser = Parse.User.current();
+  if (currentUser) {
+    property
+      .save({
+        owner,
+        description,
+        address,
+        features,
+        sharing,
+        verified: false,
+        media,
+        room,
+        ratings: {
+          '5': 0,
+          '4': 0,
+          '3': 0,
+          '2': 0,
+          '1': 0
+        },
+        overallRating: 0
+      })
+      .then(property => res.json({ success: true, id: property.id }))
+      .catch(error => {
+        console.error(error);
+        return res.json({ success: false, error: error.message });
+      });
+  } else {
+    return res.json({ success: false, error: 'unauthorized' });
+  }
 });
 
 app.put('/comment/:id', (req, res) => {
@@ -106,18 +112,23 @@ app.put('/comment/:id', (req, res) => {
   const Reviews = Parse.Object.extend('Reviews');
   const review = new Reviews();
 
-  review
-    .save({
-      property: id,
-      message,
-      anonymous,
-      author
-    })
-    .then(review => res.json({ success: true, id: review.id }))
-    .catch(error => {
-      console.error(error);
-      return res.json({ success: false, error: error.message });
-    });
+  const currentUser = Parse.User.current();
+  if (currentUser) {
+    review
+      .save({
+        property: id,
+        message,
+        anonymous,
+        author
+      })
+      .then(review => res.json({ success: true, id: review.id }))
+      .catch(error => {
+        console.error(error);
+        return res.json({ success: false, error: error.message });
+      });
+  } else {
+    return res.json({ success: false, error: 'unauthorized' });
+  }
 });
 
 app.put('/rate/:id/:stars', async (req, res) => {
@@ -148,7 +159,7 @@ app.put('/rate/:id/:stars', async (req, res) => {
     .catch(error => res.json({ success: false, error: error.message }));
 });
 
-app.put('/verify/:id', (req, res) => {
+app.put('/verify/property/:id', (req, res) => {
   const { id } = req.params;
   const Properties = Parse.Object.extend('Properties');
   const query = new Parse.Query(Properties);
@@ -165,6 +176,7 @@ app.put('/verify/:id', (req, res) => {
     })
     .catch(error => res.json({ success: false }));
 });
+
 const port = process.env.PORT || 1337;
 const httpServer = require('http').createServer(app);
 httpServer.listen(port, () => console.log('parse-server-example running on port ' + port + '.'));
