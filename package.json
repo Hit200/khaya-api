@@ -9,6 +9,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "algoliasearch": "^3.32.0",
     "body-parser": "^1.18.3",
     "express": "~4.11.x",
     "kerberos": "~0.0.x",
