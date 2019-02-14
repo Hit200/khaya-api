@@ -148,6 +148,23 @@ app.put('/rate/:id/:stars', async (req, res) => {
     .catch(error => res.json({ success: false, error: error.message }));
 });
 
+app.put('/verify/:id', (req, res) => {
+  const { id } = req.params;
+  const Properties = Parse.Object.extend('Properties');
+  const query = new Parse.Query(Properties);
+
+  query
+    .get(id)
+    .then(property => {
+      property
+        .save({
+          verified: true
+        })
+        .then(() => res.json({ success: true }))
+        .catch(error => res.json({ success: false }));
+    })
+    .catch(error => res.json({ success: false }));
+});
 const port = process.env.PORT || 1337;
 const httpServer = require('http').createServer(app);
 httpServer.listen(port, () => console.log('parse-server-example running on port ' + port + '.'));
