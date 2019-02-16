@@ -11,7 +11,9 @@
   "dependencies": {
     "algoliasearch": "^3.32.0",
     "body-parser": "^1.18.3",
+    "dotenv": "^6.2.0",
     "express": "~4.11.x",
+    "firebase": "^5.8.3",
     "kerberos": "~0.0.x",
     "parse": "~1.8.0",
     "parse-server": "~2.2.12",
