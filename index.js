@@ -3,13 +3,7 @@ const ParseServer = require('parse-server').ParseServer;
 const path = require('path');
 const bodyParser = require('body-parser');
 require('dotenv').config();
-
-// Route Imports
-const signIn = require('./routes/signIn');
-const signUp = require('./routes/signUp');
-const newProperty = require('./routes/newProperty');
-const property = require('./routes/property');
-const authorities = require('./routes/authorities');
+const fileUpload = require('express-fileupload');
 
 const api = new ParseServer({
 	databaseURI: process.env.DATABASE_URI,
@@ -26,13 +20,18 @@ const app = express();
 app.use(mountPath, api);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(
+	fileUpload({
+		limits: { fileSize: 50 * 1024 * 1024 }
+	})
+);
 
 // Routes
-app.use('/signIn', signIn);
-app.use('/signUp', signUp);
-app.use('/newProperty', newProperty);
-app.use('/property', property);
-app.use('/authorities', authorities);
+app.use('/signIn', require('./routes/signIn'));
+app.use('/signUp', require('./routes/signUp'));
+app.use('/newProperty', require('./routes/newProperty'));
+app.use('/property', require('./routes/property'));
+app.use('/authorities', require('./routes/authorities'));
 
 const port = process.env.PORT || 1337;
 const httpServer = require('http').createServer(app);
