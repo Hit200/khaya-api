@@ -4,13 +4,24 @@ const path = require('path');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 const fileUpload = require('express-fileupload');
+const morgan = require('morgan');
 
 const api = new ParseServer({
 	databaseURI: process.env.DATABASE_URI,
 	cloud: __dirname + '/cloud/main.js',
 	serverURL: process.env.SERVER_URL,
 	appId: process.env.APP_ID,
-	masterKey: process.env.MASTER_KEY
+	masterKey: process.env.MASTER_KEY,
+	appName: 'Khaya',
+	emailAdapter: {
+		module: 'parse-server-simple-mailgun-adapter',
+		options: {
+			fromAddress: process.env.FROM_ADDRESS,
+			domain: process.env.MAILGUN_DOMAIN,
+			apiKey: process.env.MAILGUN_API_KEY
+		}
+	},
+	publicServerURL: process.env.PUBLIC_SERVER_URL
 });
 
 const mountPath = process.env.MOUNT_PATH;
@@ -20,6 +31,7 @@ const app = express();
 app.use(mountPath, api);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(morgan('dev'));
 app.use(
 	fileUpload({
 		limits: { fileSize: 50 * 1024 * 1024 }
@@ -32,7 +44,9 @@ app.use('/signUp', require('./routes/signUp'));
 app.use('/newProperty', require('./routes/newProperty'));
 app.use('/property', require('./routes/property'));
 app.use('/authorities', require('./routes/authorities'));
+app.use('/signOut', require('./routes/signOut'));
+app.use('/resetPassword', require('./routes/resetPassword'));
 
 const port = process.env.PORT || 1337;
 const httpServer = require('http').createServer(app);
-httpServer.listen(port, () => console.log('khaya API running on port ' + port + '.'));
+httpServer.listen(port, () => console.log('khaya API running on port ' + port + '. \n'));
