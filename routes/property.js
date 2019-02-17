@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const request = require('superagent');
-const { calculateOverallRating } = require('../parseHelpers');
+const { calculateOverallRating } = require('../utils/parseHelpers');
 
 // Globals
 const Reviews = Parse.Object.extend('Reviews');

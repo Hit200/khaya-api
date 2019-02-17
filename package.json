@@ -13,11 +13,14 @@
     "body-parser": "^1.18.3",
     "dotenv": "^6.2.0",
     "express": "~4.11.x",
+    "express-fileupload": "^1.1.1-alpha.2",
     "firebase": "^5.8.3",
     "kerberos": "~0.0.x",
     "parse": "~1.8.0",
     "parse-server": "~2.2.12",
-    "superagent": "^4.1.0"
+    "superagent": "^4.1.0",
+    "xhr2": "^0.1.4",
+    "xmlhttprequest": "^1.8.0"
   },
   "scripts": {
     "start": "node index.js"
