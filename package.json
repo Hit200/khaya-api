@@ -16,6 +16,7 @@
     "express-fileupload": "^1.1.1-alpha.2",
     "firebase": "^5.8.3",
     "kerberos": "~0.0.x",
+    "morgan": "^1.9.1",
     "parse": "~1.8.0",
     "parse-server": "~2.2.12",
     "superagent": "^4.1.0",

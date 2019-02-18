@@ -4,30 +4,29 @@ const uuidv4 = require('uuid/v4');
 global.XMLHttpRequest = require('xhr2');
 
 const config = {
-	apiKey: 'AIzaSyBNm0FMLEtUQ23mbjlKVqn8TaF0Isu7JGQ',
-	authDomain: 'khaya-2019.firebaseapp.com',
-	databaseURL: 'https://khaya-2019.firebaseio.com',
-	projectId: 'khaya-2019',
-	storageBucket: 'khaya-2019.appspot.com',
-	messagingSenderId: '1011124471825'
+	apiKey: process.env.FIRE_API_KEY,
+	authDomain: process.env.FIRE_AUTH_DOMAIN,
+	databaseURL: process.env.FIRE_DATABASE_URL,
+	projectId: process.env.PROJECT_ID,
+	storageBucket: process.env.STORAGE_BUCKET
 };
 firebase.initializeApp(config);
 
 const postToFirebase = async files => {
 	if (files.constructor === Object) {
-		return [await retrieveImageUrl(files.data)];
+		return [await retrieveImageUrl(files.data, files.name.split('.').pop())];
 	} else if (files.constructor === Array) {
 		let imageArray = [];
 		for (let i of files) {
-			imageArray.push(await retrieveImageUrl(i.data));
+			imageArray.push(await retrieveImageUrl(i.data, i.name.split('.').pop()));
 		}
 		return imageArray;
 	}
 };
 
-const retrieveImageUrl = async file => {
+const retrieveImageUrl = async (file, extension) => {
 	try {
-		let storageRef = firebase.storage().ref(`images/${uuidv4()}.PNG`);
+		let storageRef = firebase.storage().ref(`images/${uuidv4()}.${extension}`);
 		let data = await storageRef.put(file).then(async () => await storageRef.getDownloadURL());
 		return data;
 	} catch (error) {
