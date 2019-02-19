@@ -27,7 +27,7 @@ router.put('/:id/comment', (req, res) => {
 router.put('/:id/rate/:stars', async (req, res) => {
 	const { id, stars } = req.params;
 
-	const url = `http://localhost:1337/parse/classes/Properties/${id}`;
+	const url = `https://nameless-reaches-98010.herokuapp.com/parse/classes/Properties/${id}`;
 
 	query
 		.get(id)
