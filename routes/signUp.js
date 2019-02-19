@@ -7,7 +7,7 @@ router.post('/', async (req, res) => {
 		const profile = await user.signUp(req.body);
 		res.json({ success: true, id: profile.id });
 	} catch (error) {
-		res.json({ success: false, error: error.message });
+		res.json({ success: false, error: error });
 	}
 });
 
