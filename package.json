@@ -19,6 +19,7 @@
 		"morgan": "^1.9.1",
 		"parse": "~1.8.0",
 		"parse-server": "~2.2.12",
+		"paynow": "^1.0.3",
 		"superagent": "^4.1.0",
 		"xhr2": "^0.1.4",
 		"xmlhttprequest": "^1.8.0"
