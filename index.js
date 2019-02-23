@@ -1,5 +1,6 @@
 const express = require('express');
 const ParseServer = require('parse-server').ParseServer;
+const ParseDashboard = require('parse-dashboard');
 const path = require('path');
 const bodyParser = require('body-parser');
 require('dotenv').config();
@@ -24,11 +25,29 @@ const api = new ParseServer({
 	publicServerURL: process.env.PUBLIC_SERVER_URL
 });
 
+const options = { allowInsecureHTTP: false };
+
+const dashboard = new ParseDashboard(
+	{
+		apps: [
+			{
+				serverURL: process.env.SERVER_URL,
+				appId: process.env.APP_ID,
+				masterKey: process.env.MASTER_KEY,
+				appName: 'Khaya'
+			}
+		],
+		trustProxy: 1
+	},
+	options
+);
+
 const mountPath = process.env.MOUNT_PATH;
-const app = express();
+module.exports = app = express();
 
 // Middleware
 app.use(mountPath, api);
+app.use('/dashboard', dashboard);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
