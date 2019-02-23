@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { report } = require('../utils/errorHelpers');
 
 router.put('/property/:id/verify', (req, res) => {
 	const Properties = Parse.Object.extend('Properties');
@@ -14,12 +15,18 @@ router.put('/property/:id/verify', (req, res) => {
 						verified: true
 					})
 					.then(() => res.json({ success: true }))
-					.catch(error => res.json({ success: false, error: error.message }));
+					.catch(error => {
+						report(error);
+						res.json({ success: false, error: error.message });
+					});
 			} else {
 				return res.json({ success: false, message: 'unauthorized' });
 			}
 		})
-		.catch(error => res.json({ success: false, error: error.message }));
+		.catch(error => {
+			report(error);
+			res.json({ success: false, error: error.message });
+		});
 });
 
 module.exports = router;

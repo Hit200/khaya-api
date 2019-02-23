@@ -1,19 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const { postToFirebase } = require('../utils/ImageUploadHelpers');
+const { report } = require('../utils/errorHelpers');
 
 router.post('/', async (req, res) => {
 	const Properties = Parse.Object.extend('Properties');
 	const property = new Properties();
 
-	const currentUser = Parse.User.current();
 	const media = await postToFirebase(req.files.images);
 	if (currentUser) {
 		property
 			.save({
 				...req.body,
 				media,
-				sharing: false,
 				verified: false,
 				ratings: {
 					'5': 0,
@@ -22,10 +21,14 @@ router.post('/', async (req, res) => {
 					'2': 0,
 					'1': 0
 				},
+				likes: 0,
 				overallRating: 0
 			})
 			.then(property => res.json({ success: true, id: property.id }))
-			.catch(error => res.json({ success: false, error: error.message }));
+			.catch(error => {
+				report(error);
+				res.json({ success: false, error: error.message });
+			});
 	} else {
 		return res.json({ success: false, error: 'unauthorized' });
 	}
