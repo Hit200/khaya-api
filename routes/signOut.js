@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { report } = require('../utils/errorHelpers');
 
 router.post('/', (req, res) => {
 	if (Parse.User.current()) {
@@ -7,7 +8,10 @@ router.post('/', (req, res) => {
 			.then(() =>
 				Parse.User.current() ? res.json({ success: true }) : res.json({ success: false })
 			)
-			.catch(error => console.error(error));
+			.catch(error => {
+				report(error);
+				res.json({ success: false, error: error.message });
+			});
 	} else {
 		res.json({ success: true, message: 'no authenticated user' });
 	}

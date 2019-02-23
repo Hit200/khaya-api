@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const request = require('superagent');
 const { calculateOverallRating } = require('../utils/parseHelpers');
+const { report } = require('../utils/errorHelpers');
 
 // Globals
 const Reviews = Parse.Object.extend('Reviews');
@@ -18,8 +19,12 @@ router.put('/:id/comment', (req, res) => {
 				...req.body
 			})
 			.then(review => res.json({ success: true, id: review.id }))
-			.catch(error => res.json({ success: false, error: error.message }));
+			.catch(error => {
+				report(error);
+				res.json({ success: false, error: error.message });
+			});
 	} else {
+		report(error);
 		return res.json({ success: false, error: 'unauthorized' });
 	}
 });
@@ -27,7 +32,7 @@ router.put('/:id/comment', (req, res) => {
 router.put('/:id/rate/:stars', async (req, res) => {
 	const { id, stars } = req.params;
 
-	const url = `http://localhost:1337/parse/classes/Properties/${id}`;
+	const url = `https://khaya-api.herokuapp.com/parse/classes/Properties/${id}`;
 
 	query
 		.get(id)
@@ -46,16 +51,25 @@ router.put('/:id/rate/:stars', async (req, res) => {
 					overallRating: calculateOverallRating(ratings)
 				})
 				.then(response => res.json({ success: true }))
-				.catch(error => res.json({ success: false, error: error.message }));
+				.catch(error => {
+					report(error);
+					res.json({ success: false, error: error.message });
+				});
 		})
-		.catch(error => res.json({ success: false, error: error.message }));
+		.catch(error => {
+			report(error);
+			res.json({ success: false, error: error.message });
+		});
 });
 
 router.get('/:id/details', (req, res) =>
 	query
 		.get(req.params.id)
 		.then(property => res.json({ success: true, property }))
-		.catch(error => res.json({ success: false, error: error.message }))
+		.catch(error => {
+			report(error);
+			res.json({ success: false, error: error.message });
+		})
 );
 
 module.exports = router;
