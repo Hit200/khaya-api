@@ -37,6 +37,12 @@ const dashboard = new ParseDashboard(
 				appName: 'Khaya'
 			}
 		],
+		users: [
+			{
+				user: process.env.USER,
+				pass: process.env.PASS
+			}
+		],
 		trustProxy: 1
 	},
 	options
