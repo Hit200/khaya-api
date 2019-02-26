@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 const fileUpload = require('express-fileupload');
 const morgan = require('morgan');
+const cors = require('cors');
 
 const api = new ParseServer({
 	databaseURI: process.env.DATABASE_URI,
@@ -62,6 +63,8 @@ app.use(
 		limits: { fileSize: 50 * 1024 * 1024 }
 	})
 );
+app.use(cors());
+Parse.User.enableUnsafeCurrentUser();
 
 // Routes
 app.use('/signIn', require('./routes/signIn'));
