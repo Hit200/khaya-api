@@ -8,6 +8,7 @@ router.post('/', async (req, res) => {
 	const property = new Properties();
 
 	const media = await postToFirebase(req.files.images);
+  const currentUser = Parse.User.current();
 	if (currentUser) {
 		property
 			.save({
