@@ -78,7 +78,7 @@ router.post('/:id/room/:room/bed/:bed', (req, res) => {
 
 	query.get(id).then(property => {
 		property.set(`room.${room}.${bed}`, user.id);
-		property.increment(`room.${room}`);
+		property.increment(`room.${room}.current`);
 		property
 			.save()
 			.then(() => res.json({ success: true }))
