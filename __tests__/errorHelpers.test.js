@@ -6,7 +6,7 @@ const err = {
 };
 
 describe('Report errors to Parse.Analytics', () => {
-	it('Tracks errors', () => {
+	xit('Tracks errors', () => {
 		report(err)
 			.then(res => {
 				expect(res).toBeInstanceOf(Parse);

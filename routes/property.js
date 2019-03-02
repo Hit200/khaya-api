@@ -38,7 +38,7 @@ router.put('/:id/rate/:stars', async (req, res) => {
 		.get(id)
 		.then(async property => {
 			const ratings = await property.get('ratings');
-			let ratingCount = await ratings[`${stars}`];
+			let ratingCount = ratings[`${stars}`];
 			ratingCount += 1;
 			ratings[`${stars}`] += 1;
 
