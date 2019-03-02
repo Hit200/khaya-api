@@ -72,4 +72,20 @@ router.get('/:id/details', (req, res) =>
 		})
 );
 
+router.put('/:id/room/:room/bed/:bed', (req, res) => {
+	const { id, room, bed } = req.params;
+	const user = Parse.User.current();
+
+	query.get(id).then(property => {
+		if(property[`room.${room}.current`] < property[`room.${room}.capacity`]){
+			property.set(`room.${room}.${bed}`, user.id);
+			property.save()
+			.then(() => res.json({success : true}))
+			.catch((error) => {
+				Parse.Analytics.track(error);
+				res.json({success : false})
+			})
+		}	
+	});
+});
 module.exports = router;
