@@ -72,7 +72,7 @@ router.get('/:id/details', (req, res) =>
 		})
 );
 
-router.put('/:id/room/:room/bed/:bed', (req, res) => {
+router.post('/:id/room/:room/bed/:bed', (req, res) => {
 	const { id, room, bed } = req.params;
 	const user = Parse.User.current();
 
