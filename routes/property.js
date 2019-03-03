@@ -72,7 +72,7 @@ router.get('/:id/details', (req, res) =>
 		})
 );
 
-router.post('/:id/room/:room/bed/:bed', (req, res) => {
+router.post('/:id/room/:room/bed/:bed', async (req, res) => {
 	const { id, room, bed } = req.params;
 	const user = Parse.User.current();
 	const url = `https://khaya-api.herokuapp.com/parse/classes/Properties/${id}`;
@@ -83,7 +83,8 @@ router.post('/:id/room/:room/bed/:bed', (req, res) => {
 		.get(id)
 		.then(property => {
 			// occupants.push(...property['room'][`${room}`][`bed`]);
-			console.log(property);
+			const roomData = await property.get('room');
+			console.log(roomData);
 			res.json({ success: true });
 		})
 		.catch(error => {
