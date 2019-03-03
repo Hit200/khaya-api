@@ -75,17 +75,26 @@ router.get('/:id/details', (req, res) =>
 router.post('/:id/room/:room/bed/:bed', (req, res) => {
 	const { id, room, bed } = req.params;
 	const user = Parse.User.current();
+	const url = `https://khaya-api.herokuapp.com/classes/Properties/${id}`;
 
-	query.get(id).then(property => {
-		property.set(`room.${room}.${bed}`, user.id);
-		property.increment(`room.${room}.current`);
-		property
-			.save()
-			.then(() => res.json({ success: true }))
-			.catch(error => {
-				Parse.Analytics.track(error, { message: error.message });
-				res.json({ success: false, error });
-			});
-	});
+	request
+		.put(url)
+		.set('X-Parse-Application-Id', process.env.APP_ID)
+		.set('Content-Type', 'application/json')
+		.send({
+			[`room[${room}].bed[${bed}]`]: user,
+			[`room[${room}].current`]: {
+				__op: 'Increment',
+				amount: 1
+			}
+		})
+		.then(() => {
+			//send transactional email via sendgrid
+			res.json({ success: true, message: `Booking for ${user.id} successful` });
+		})
+		.catch(error => {
+			report(error);
+			res.json({ success: false, error: error.message });
+		});
 });
 module.exports = router;
