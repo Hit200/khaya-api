@@ -81,7 +81,7 @@ router.post('/:id/room/:room/bed/:bed', async (req, res) => {
 
 	query
 		.get(id)
-		.then(property => {
+		.then(async property => {
 			// occupants.push(...property['room'][`${room}`][`bed`]);
 			const roomData = await property.get('room');
 			console.log(roomData);
