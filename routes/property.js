@@ -45,12 +45,12 @@ router.put('/:id/rate/:stars', async (req, res) => {
 			request
 				.put(url)
 				.set('Content-Type', 'application/json')
-				.set('X-Parse-Application-id', 'parse-khaya-app-ID')
+				.set('X-Parse-Application-Id', process.env.APP_ID)
 				.send({
 					[`ratings.${stars}`]: ratingCount,
 					overallRating: calculateOverallRating(ratings)
 				})
-				.then(response => res.json({ success: true }))
+				.then(() => res.json({ success: true }))
 				.catch(error => {
 					report(error);
 					res.json({ success: false, error: error.message });
