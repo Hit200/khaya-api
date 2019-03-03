@@ -77,24 +77,38 @@ router.post('/:id/room/:room/bed/:bed', (req, res) => {
 	const user = Parse.User.current();
 	const url = `https://khaya-api.herokuapp.com/parse/classes/Properties/${id}`;
 
-	request
-		.put(url)
-		.set('X-Parse-Application-Id', process.env.APP_ID)
-		.set('Content-Type', 'application/json')
-		.send({
-			[`room[${room}].bed[${bed}]`]: user,
-			[`room[${room}].current`]: {
-				__op: 'Increment',
-				amount: 1
-			}
-		})
-		.then(() => {
-			//send transactional email via sendgrid
-			res.json({ success: true, message: `Booking for ${user.id} successful` });
+	const occupants = [];
+
+	query
+		.get(id)
+		.then(property => {
+			occupants.push(...property['room'][`${room}`][`bed`]);
+			console.log(occupants);
+			res.json({ success: true });
 		})
 		.catch(error => {
-			report(error);
-			res.json({ success: false, error: error.message });
+			console.log(error);
+			res.json({ success: false });
 		});
+
+	// request
+	// 	.put(url)
+	// 	.set('Content-Type', 'application/json')
+	// 	.set('X-Parse-Application-Id', process.env.APP_ID)
+	// 	.send({
+	// 		[`room.${room}.bed.${bed}`]: user.id,
+	// 		[`room.${room}.current`]: {
+	// 			__op: 'Increment',
+	// 			amount: 1
+	// 		}
+	// 	})
+	// 	.then(() => {
+	// 		//send transactional email via sendgrid
+	// 		res.json({ success: true, message: `Booking for ${user.id} successful` });
+	// 	})
+	// 	.catch(error => {
+	// 		report(error);
+	// 		res.json({ success: false, error: error.message });
+	// 	});
 });
 module.exports = router;
