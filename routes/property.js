@@ -75,7 +75,7 @@ router.get('/:id/details', (req, res) =>
 router.post('/:id/room/:room/bed/:bed', (req, res) => {
 	const { id, room, bed } = req.params;
 	const user = Parse.User.current();
-	const url = `https://khaya-api.herokuapp.com/classes/Properties/${id}`;
+	const url = `https://khaya-api.herokuapp.com/parse/classes/Properties/${id}`;
 
 	request
 		.put(url)
