@@ -82,8 +82,8 @@ router.post('/:id/room/:room/bed/:bed', (req, res) => {
 	query
 		.get(id)
 		.then(property => {
-			occupants.push(...property['room'][`${room}`][`bed`]);
-			console.log(occupants);
+			// occupants.push(...property['room'][`${room}`][`bed`]);
+			console.log(property);
 			res.json({ success: true });
 		})
 		.catch(error => {
