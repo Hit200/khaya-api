@@ -7,13 +7,13 @@ router.post('/', async (req, res) => {
 	const Properties = Parse.Object.extend('Properties');
 	const property = new Properties();
 
-	//const media = await postToFirebase(req.files.images);
+	const media = await postToFirebase(req.files.images);
 	const currentUser = Parse.User.current();
 	if (currentUser) {
 		property
 			.save({
 				...req.body,
-				//media,
+				media,
 				verified: false,
 				ratings: {
 					'5': 0,
