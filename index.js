@@ -54,10 +54,10 @@ module.exports = app = express();
 
 // Middleware
 app.use(
-  cors({
-    origin: '*',
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-  })
+	cors({
+		origin: '*',
+		optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+	})
 );
 app.use(mountPath, api);
 app.use('/dashboard', dashboard);
@@ -69,8 +69,6 @@ app.use(
 		limits: { fileSize: 50 * 1024 * 1024 }
 	})
 );
-app.use(cors());
-Parse.User.enableUnsafeCurrentUser();
 
 // Routes
 app.use('/signIn', require('./routes/signIn'));
