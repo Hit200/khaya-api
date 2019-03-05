@@ -10,11 +10,11 @@ router.post('/', async (req, res) => {
 
 	const currentUser = Parse.User.current();
 	if (currentUser) {
-		//const media = await postToFirebase(req.files.images);
+		const media = await postToFirebase(req.files.images);
 		property
 			.save({
 				...req.body,
-				//media,
+				media,
 				verified: false,
 				minPrice: getMin(req.body.room),
 				maxPrice: getMax(req.body.room),
