@@ -16,7 +16,7 @@ router.put('/property/:id/verify', (req, res) => {
 					})
 					.then(() => res.json({ success: true }))
 					.catch(error => {
-						report(error);
+						report(error.message);
 						res.json({ success: false, error: error.message });
 					});
 			} else {
@@ -24,7 +24,7 @@ router.put('/property/:id/verify', (req, res) => {
 			}
 		})
 		.catch(error => {
-			report(error);
+			report(error.message);
 			res.json({ success: false, error: error.message });
 		});
 });

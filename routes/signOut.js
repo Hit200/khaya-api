@@ -13,7 +13,7 @@ router.post('/', (req, res) => {
 				res.json({ success: false, error: error.message });
 			});
 	} else {
-		res.json({ success: true, message: 'no authenticated user' });
+		res.json({ success: false, message: 'no authenticated user' });
 	}
 });
 

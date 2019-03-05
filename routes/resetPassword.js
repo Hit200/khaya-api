@@ -11,7 +11,7 @@ router.post('/', (req, res) => {
 			});
 		})
 		.catch(error => {
-			report(error);
+			report(error.message);
 			res.json({ success: false, error: error.message });
 		});
 });
