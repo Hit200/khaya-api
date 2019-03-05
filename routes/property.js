@@ -75,53 +75,25 @@ router.get('/:id/details', (req, res) =>
 router.post('/:id/room/:room/bed/:bed', async (req, res) => {
 	const { id, room, bed } = req.params;
 	const user = Parse.User.current();
-	const url = `https://khaya-api.herokuapp.com/parse/classes/Properties/${id}`;
 
 	try {
 		const property = await query.get(id);
 		const rooms = await property.get('room');
-		const current = rooms[`${room}`]['current'] + 1;
-		console.log(`current : ${current}`);
-		const occupants = rooms[`${room}`]['bed'].push(user.id);
-		console.log(`occupants : ${occupants}`);
 
-		await property.save({
-			room: rooms
-		});
-		res.json({ success: true });
+		if (rooms[`${room}`][`current`] <= rooms[`${room}`][`capacity`]) {
+			rooms[`${room}`]['current'] += 1;
+			rooms[`${room}`]['bed'].push(user.id);
+			await property.save({
+				room: rooms
+			});
+			res.json({ success: true });
+		}
+
+		res.json({ success: false, error: 'room is fully booked.' });
 	} catch (error) {
 		report(error);
 		res.json({ success: false, error: error.message });
 	}
-
-	// query
-	// 	.get(id)
-	// 	.then(async property => {
-	// 		property
-	// 			.save()
-	// 			.then(property => {
-	// 				property.add(`room.${room}.bed`, user.id);
-	// 				property.increment(`room.${room}.current`);
-
-	// 				property
-	// 					.save()
-	// 					.then(() => {
-	// 						res.json({ success: true });
-	// 					})
-	// 					.catch(error => {
-	// 						report(error);
-	// 						res.json({ success: false, error });
-	// 					});
-	// 			})
-	// 			.catch(error => {
-	// 				report(error);
-	// 				res.json({ success: false, error });
-	// 			});
-	// 	})
-	// 	.catch(error => {
-	// 		report(error);
-	// 		res.json({ success: false, error });
-	// 	});
 });
 
 module.exports = router;
