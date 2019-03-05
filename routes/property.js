@@ -80,16 +80,31 @@ router.post('/:id/room/:room/bed/:bed', async (req, res) => {
 	query
 		.get(id)
 		.then(async property => {
-			property.save().then(property => {
-				property.add(`room[${room}].bed`, user.id);
-				property.increment(`room[${room}].current`);
+			property
+				.save()
+				.then(property => {
+					property.add(`room.${room}.bed`, user.id);
+					property.increment(`room.${room}.current`);
 
-				return property.save();
-			});
+					property
+						.save()
+						.then(() => {
+							res.json({ success: true });
+						})
+						.catch(error => {
+							report(error);
+							res.json({ success: false, error });
+						});
+				})
+				.catch(error => {
+					report(error);
+					res.json({ success: false, error });
+				});
 		})
 		.catch(error => {
 			report(error);
-			res.json({ success: false, error});
+			res.json({ success: false, error });
 		});
 });
+
 module.exports = router;
