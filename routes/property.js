@@ -90,6 +90,7 @@ router.post('/:id/room/:room/bed/:bed', async (req, res) => {
 			await property.save({
 				room: rooms
 			});
+			sendSMS(name, '+263783620957', room, location);
 			sendEmail(name, email, room, location);
 			return res.json({ success: true });
 		}
