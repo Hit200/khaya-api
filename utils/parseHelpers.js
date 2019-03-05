@@ -9,8 +9,8 @@ const calculateOverallRating = ratingObject => {
 	return Math.round(overallRating) / 100;
 };
 
-const getPrices = () => data.map(d => d.price);
-const getMin = () => Math.min(...getPrices());
-const getMax = () => Math.max(...getPrices());
+const getPrices = data => data.map(d => d.price);
+const getMin = rooms => Math.min(...getPrices(rooms));
+const getMax = rooms => Math.max(...getPrices(rooms));
 
 module.exports = { calculateOverallRating, getMin, getMax };
