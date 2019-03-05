@@ -80,11 +80,11 @@ router.post('/:id/room/:room/bed/:bed', async (req, res) => {
 	try {
 		const property = await query.get(id);
 		const room = await property.get('room');
-		const current = room[`${room}`]['current'] + 1;
+		const current = room[`${room}.current`] + 1;
 
 		console.log(`current : ${current}`);
 
-		const occupants = room[`${room}`]['bed'].push(user.id);
+		const occupants = room[`${room}.bed`].push(user.id);
 
 		console.log(`occupants : ${occupants}`);
 
@@ -94,34 +94,34 @@ router.post('/:id/room/:room/bed/:bed', async (req, res) => {
 		res.json({ success: false, error: error.message });
 	}
 
-	query
-		.get(id)
-		.then(async property => {
-			property
-				.save()
-				.then(property => {
-					property.add(`room.${room}.bed`, user.id);
-					property.increment(`room.${room}.current`);
+	// query
+	// 	.get(id)
+	// 	.then(async property => {
+	// 		property
+	// 			.save()
+	// 			.then(property => {
+	// 				property.add(`room.${room}.bed`, user.id);
+	// 				property.increment(`room.${room}.current`);
 
-					property
-						.save()
-						.then(() => {
-							res.json({ success: true });
-						})
-						.catch(error => {
-							report(error);
-							res.json({ success: false, error });
-						});
-				})
-				.catch(error => {
-					report(error);
-					res.json({ success: false, error });
-				});
-		})
-		.catch(error => {
-			report(error);
-			res.json({ success: false, error });
-		});
+	// 				property
+	// 					.save()
+	// 					.then(() => {
+	// 						res.json({ success: true });
+	// 					})
+	// 					.catch(error => {
+	// 						report(error);
+	// 						res.json({ success: false, error });
+	// 					});
+	// 			})
+	// 			.catch(error => {
+	// 				report(error);
+	// 				res.json({ success: false, error });
+	// 			});
+	// 	})
+	// 	.catch(error => {
+	// 		report(error);
+	// 		res.json({ success: false, error });
+	// 	});
 });
 
 module.exports = router;
