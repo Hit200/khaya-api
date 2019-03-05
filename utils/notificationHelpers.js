@@ -31,9 +31,9 @@ const sendEmail = async (name, email, roomNumber, location) => {
 				email: process.env.FROM_EMAIL,
 				name: 'KHAYA BOOKINGS'
 			},
-			template_id: process.env.SENDGRID_TEMPLATE_ID
+			template_id: `${process.env.SENDGRID_TEMPLATE_ID}`
 		})
-		.then(res => console.log(res))
+		.then(response => console.log(response))
 		.catch(error => report(error));
 };
 
