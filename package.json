@@ -27,7 +27,8 @@
 		"xhr2": "^0.1.4",
 		"xmlhttprequest": "^1.8.0",
 		"sentry-node": "^2.3.2",
-		"@sentry/node": "^4.6.4"
+		"@sentry/node": "^4.6.4",
+		"twilio": "^3.29.0"
 	},
 	"scripts": {
 		"start": "node index.js"

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const request = require('superagent');
 const { calculateOverallRating } = require('../utils/parseHelpers');
+const { sendSMS } = require('../utils/notificationHelpers');
 const { report } = require('../utils/errorHelpers');
 
 // Globals
@@ -86,10 +87,13 @@ router.post('/:id/room/:room/bed/:bed', async (req, res) => {
 			await property.save({
 				room: rooms
 			});
-			res.json({ success: true });
+			console.log(
+				sendSMS('Faith', '+263778618403', '42 Castens Ave, Belvedere, Harare, Zimbabwe', 1)
+			);
+			return res.json({ success: true });
 		}
 
-		res.json({ success: false, error: 'room is fully booked.' });
+		res.json({ success: false, error: 'Room is fully booked.' });
 	} catch (error) {
 		report(error);
 		res.json({ success: false, error: error.message });
