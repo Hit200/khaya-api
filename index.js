@@ -55,7 +55,7 @@ module.exports = app = express();
 // Middleware
 app.use(
 	cors({
-		origin: 'localhost:8000',
+		origin: 'http://localhost',
 		optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 	})
 );
