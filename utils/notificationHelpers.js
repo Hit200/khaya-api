@@ -25,7 +25,6 @@ const sendEmail = async (name, email, number, location) => {
 						room: {
 							number
 						},
-						roomNumber,
 						location
 					}
 				}
