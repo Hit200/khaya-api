@@ -80,11 +80,11 @@ router.post('/:id/room/:room/bed/:bed', async (req, res) => {
 	try {
 		const property = await query.get(id);
 		const rooms = await property.get('room');
-		const current = rooms[`${room}.current`] + 1;
+		const current = rooms[`${room}`]['current'] + 1;
 
 		console.log(`current : ${current}`);
 
-		const occupants = rooms[`${room}.bed`];
+		const occupants = rooms[`${room}`]['bed'];
 		occupants.push(user.id);
 
 		console.log(`occupants : ${occupants}`);
