@@ -53,12 +53,7 @@ const mountPath = process.env.MOUNT_PATH;
 module.exports = app = express();
 
 // Middleware
-app.use(
-	cors({
-		origin: 'http://localhost',
-		optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-	})
-);
+app.use(cors());
 app.use(mountPath, api);
 app.use('/dashboard', dashboard);
 app.use(bodyParser.json());
