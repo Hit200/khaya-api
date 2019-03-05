@@ -55,7 +55,7 @@ module.exports = app = express();
 // Middleware
 app.use(
 	cors({
-		origin: '*',
+		origin: 'http://localhost:8000',
 		optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 	})
 );
@@ -66,7 +66,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('dev'));
 app.use(
 	fileUpload({
-		limits: { fileSize: 50 * 1024 * 1024 }
+		limits: { fileSize: 10 * 1024 * 1024 } // 10 MB file limit
 	})
 );
 
