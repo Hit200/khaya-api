@@ -30,7 +30,7 @@ router.post('/', async (req, res) => {
 			})
 			.then(property => res.json({ success: true, id: property.id }))
 			.catch(error => {
-				report(error);
+				report(error.message);
 				res.json({ success: false, error: error.message });
 			});
 	} else {

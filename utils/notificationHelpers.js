@@ -13,7 +13,7 @@ const sendSMS = async () => {
 		console.log(message);
 		return message.id;
 	} catch (error) {
-		report(error);
+		report(error.message);
 		res.json({ success: false, error: error.message });
 	}
 };

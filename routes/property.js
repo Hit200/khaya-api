@@ -21,11 +21,11 @@ router.put('/:id/comment', (req, res) => {
 			})
 			.then(review => res.json({ success: true, id: review.id }))
 			.catch(error => {
-				report(error);
+				report(error.message);
 				res.json({ success: false, error: error.message });
 			});
 	} else {
-		report(error);
+		report(error.message);
 		return res.json({ success: false, error: 'unauthorized' });
 	}
 });
@@ -53,12 +53,12 @@ router.put('/:id/rate/:stars', async (req, res) => {
 				})
 				.then(() => res.json({ success: true }))
 				.catch(error => {
-					report(error);
+					report(error.message);
 					res.json({ success: false, error: error.message });
 				});
 		})
 		.catch(error => {
-			report(error);
+			report(error.message);
 			res.json({ success: false, error: error.message });
 		});
 });
@@ -68,7 +68,7 @@ router.get('/:id/details', (req, res) =>
 		.get(req.params.id)
 		.then(property => res.json({ success: true, property }))
 		.catch(error => {
-			report(error);
+			report(error.message);
 			res.json({ success: false, error: error.message });
 		})
 );
