@@ -76,6 +76,9 @@ router.get('/:id/details', (req, res) =>
 router.post('/:id/room/:room/bed/:bed', async (req, res) => {
 	const { id, room, bed } = req.params;
 	const user = Parse.User.current();
+	const name = await user.getUsername();
+	const email = await user.getEmail();
+	console.log(name + ' ' + email);
 
 	try {
 		const property = await query.get(id);
@@ -88,7 +91,7 @@ router.post('/:id/room/:room/bed/:bed', async (req, res) => {
 			await property.save({
 				room: rooms
 			});
-			sendEmail(user.getUsername(), user.getEmail(), room, location);
+			sendEmail(name, email, room, location);
 			return res.json({ success: true });
 		}
 
