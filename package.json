@@ -25,12 +25,15 @@
 		"paynow": "^1.0.3",
 		"superagent": "^4.1.0",
 		"xhr2": "^0.1.4",
-		"xmlhttprequest": "^1.8.0"
+		"xmlhttprequest": "^1.8.0",
+		"sentry-node": "^2.3.2",
+		"@sentry/node": "^4.6.4"
 	},
 	"scripts": {
 		"start": "node index.js"
 	},
 	"engines": {
-		"node": ">=4.3"
+		"node": ">=4.3",
+		"npm": ">=6.4"
 	}
 }
