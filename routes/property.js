@@ -87,9 +87,7 @@ router.post('/:id/room/:room/bed/:bed', async (req, res) => {
 			await property.save({
 				room: rooms
 			});
-			console.log(
-				sendSMS('Faith', '+263778618403', '42 Castens Ave, Belvedere, Harare, Zimbabwe', 1)
-			);
+			sendSMS('Faith', '+263778618403', '42 Castens Ave, Belvedere, Harare, Zimbabwe', 1);
 			return res.json({ success: true });
 		}
 
