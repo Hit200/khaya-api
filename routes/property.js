@@ -78,7 +78,6 @@ router.post('/:id/room/:room/bed/:bed', async (req, res) => {
 	const user = Parse.User.current();
 	const name = await user.getUsername();
 	const email = await user.getEmail();
-	console.log(name + ' ' + email);
 
 	try {
 		const property = await query.get(id);

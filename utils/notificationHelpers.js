@@ -35,7 +35,7 @@ const sendEmail = async (name, email, number, location) =>
 			},
 			template_id: `${process.env.SENDGRID_TEMPLATE_ID}`
 		})
-		.then(response => console.log(response))
+		.then(response => response)
 		.catch(error => report(error));
 
 module.exports = { sendSMS, sendEmail };
