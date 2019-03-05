@@ -5,8 +5,8 @@ const { report } = require('../utils/errorHelpers');
 // const client = require('twilio')(accountSid, authToken);
 
 const sendSMS = async () => {};
-const sendEmail = async (name, email, number, location) => {
-	request
+const sendEmail = async (name, email, number, location) =>
+	await request
 		.post('https://api.sendgrid.com/v3/mail/send')
 		.set('content-type', 'application/json')
 		.set('authorization', `Bearer ${process.env.SENDGRID_KEY}`)
@@ -37,6 +37,5 @@ const sendEmail = async (name, email, number, location) => {
 		})
 		.then(response => console.log(response))
 		.catch(error => report(error));
-};
 
 module.exports = { sendSMS, sendEmail };
