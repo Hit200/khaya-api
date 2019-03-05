@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const request = require('superagent');
 const { calculateOverallRating } = require('../utils/parseHelpers');
-const { sendSMS } = require('../utils/notificationHelpers');
+const { sendSMS, sendEmail } = require('../utils/notificationHelpers');
 const { report } = require('../utils/errorHelpers');
 
 // Globals
@@ -80,6 +80,7 @@ router.post('/:id/room/:room/bed/:bed', async (req, res) => {
 	try {
 		const property = await query.get(id);
 		const rooms = await property.get('room');
+		const location = await property.get('location');
 
 		if (rooms[`${room}`].current < rooms[`${room}`].capacity) {
 			rooms[`${room}`].current += 1;
@@ -87,7 +88,7 @@ router.post('/:id/room/:room/bed/:bed', async (req, res) => {
 			await property.save({
 				room: rooms
 			});
-			sendSMS();
+			sendEmail(user.getUsername(), user.getEmail(), room, location);
 			return res.json({ success: true });
 		}
 

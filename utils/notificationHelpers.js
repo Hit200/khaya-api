@@ -1,21 +1,40 @@
-const accountSid = process.env.TWILIO_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
+const request = require('superagent');
 const { report } = require('../utils/errorHelpers');
-const client = require('twilio')(accountSid, authToken);
+// const accountSid = process.env.TWILIO_SID;
+// const authToken = process.env.TWILIO_AUTH_TOKEN;
+// const client = require('twilio')(accountSid, authToken);
 
-const sendSMS = async () => {
-	try {
-		const message = await client.messages.create({
-			body: `Hie Faith,\n Your booking at 42 Castens Ave, Belvedere, Harare, Zimbabwe for room no. 1 was successful.`,
-			from: process.env.TWILIO_CONTACT,
-			to: '+263778618403'
-		});
-		console.log(message);
-		return message.id;
-	} catch (error) {
-		report(error.message);
-		res.json({ success: false, error: error.message });
-	}
+const sendSMS = async () => {};
+const sendEmail = async (name, email, roomNumber, location) => {
+	request
+		.post('https://api.sendgrid.com/v3/mail/send')
+		.set('content-type', 'application/json')
+		.set('authorization', `Bearer ${process.env.SENDGRID_KEY}`)
+		.type('json')
+		.send({
+			personalizations: [
+				{
+					to: [
+						{
+							email,
+							name
+						}
+					],
+					dynamic_template_data: {
+						name,
+						roomNumber,
+						location
+					}
+				}
+			],
+			from: {
+				email: process.env.FROM_EMAIL,
+				name: 'KHAYA BOOKINGS'
+			},
+			template_id: process.env.SENDGRID_TEMPLATE_ID
+		})
+		.then(res => console.log(res))
+		.catch(error => report(error));
 };
 
-module.exports = { sendSMS };
+module.exports = { sendSMS, sendEmail };
