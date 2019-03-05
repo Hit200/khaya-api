@@ -88,8 +88,8 @@ router.post('/:id/room/:room/bed/:bed', async (req, res) => {
 			});
 		})
 		.catch(error => {
-			console.log(error);
-			res.json({ success: false });
+			report(error);
+			res.json({ success: false, error});
 		});
 });
 module.exports = router;
