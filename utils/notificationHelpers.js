@@ -5,7 +5,7 @@ const { report } = require('../utils/errorHelpers');
 // const client = require('twilio')(accountSid, authToken);
 
 const sendSMS = async () => {};
-const sendEmail = async (name, email, roomNumber, location) => {
+const sendEmail = async (name, email, number, location) => {
 	request
 		.post('https://api.sendgrid.com/v3/mail/send')
 		.set('content-type', 'application/json')
@@ -22,6 +22,9 @@ const sendEmail = async (name, email, roomNumber, location) => {
 					],
 					dynamic_template_data: {
 						name,
+						room: {
+							number
+						},
 						roomNumber,
 						location
 					}
