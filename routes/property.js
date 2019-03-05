@@ -81,13 +81,13 @@ router.post('/:id/room/:room/bed/:bed', async (req, res) => {
 		const property = await query.get(id);
 		const rooms = await property.get('room');
 
-		if (rooms[`${room}`][`current`] < rooms[`${room}`][`capacity`]) {
-			rooms[`${room}`]['current'] += 1;
-			rooms[`${room}`]['bed'].push(user.id);
+		if (rooms[`${room}`].current < rooms[`${room}`].capacity) {
+			rooms[`${room}`].current += 1;
+			rooms[`${room}`].bed.push(user.id);
 			await property.save({
 				room: rooms
 			});
-			sendSMS('Faith', '+263778618403', '42 Castens Ave, Belvedere, Harare, Zimbabwe', 1);
+			sendSMS();
 			return res.json({ success: true });
 		}
 
