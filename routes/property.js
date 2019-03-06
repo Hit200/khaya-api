@@ -73,8 +73,8 @@ router.get('/:id/details', (req, res) =>
 		})
 );
 
-router.post('/:id/room/:room/bed/:bed', async (req, res) => {
-	const { id, room, bed } = req.params;
+router.post('/:id/room/:room', async (req, res) => {
+	const { id, room } = req.params;
 	const user = Parse.User.current();
 	const name = await user.getUsername();
 	const email = await user.getEmail();
@@ -90,7 +90,7 @@ router.post('/:id/room/:room/bed/:bed', async (req, res) => {
 			await property.save({
 				room: rooms
 			});
-			sendSMS(name, '+263783620957', room, location);
+			sendSMS(name, '+263779206440', room, location);
 			sendEmail(name, email, room, location);
 			return res.json({ success: true });
 		}
