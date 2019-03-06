@@ -80,6 +80,8 @@ router.post('/:id/room/:room', async (req, res) => {
 	const email = await user.getEmail();
 	const contact = await user.get('contact');
 
+	console.log(contact);
+
 	try {
 		const property = await query.get(id);
 		const rooms = await property.get('room');
@@ -91,7 +93,7 @@ router.post('/:id/room/:room', async (req, res) => {
 			await property.save({
 				room: rooms
 			});
-			sendSMS(name, '+263778618403', room, location);
+			sendSMS(name, contact, room, location);
 			sendEmail(name, email, room, location);
 			return res.json({ success: true });
 		}
