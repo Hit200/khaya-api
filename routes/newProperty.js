@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const { postToFirebase } = require('../utils/ImageUploadHelpers');
 const { report } = require('../utils/errorHelpers');
 const { getMin, getMax } = require('../utils/parseHelpers');
 
@@ -10,11 +9,9 @@ router.post('/', async (req, res) => {
 
 	const currentUser = Parse.User.current();
 	if (currentUser) {
-		const media = await postToFirebase(req.files.images);
 		property
 			.save({
 				...req.body,
-				media,
 				verified: false,
 				minPrice: getMin(req.body.room),
 				maxPrice: getMax(req.body.room),
