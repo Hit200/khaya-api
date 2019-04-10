@@ -66,6 +66,7 @@ app.use(
 );
 
 // Routes
+app.get('/test', (req, res) => res.json({ success: true, status: 'Im awake' }));
 app.use('/signIn', require('./routes/signIn'));
 app.use('/signUp', require('./routes/signUp'));
 app.use('/newProperty', require('./routes/newProperty'));
