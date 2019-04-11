@@ -32,7 +32,8 @@
 		"xmlhttprequest": "^1.8.0"
 	},
 	"scripts": {
-		"start": "node index.js"
+		"start": "node index.js",
+		"test": "node ./node_modules/jest/bin/jest.js --coverage"
 	},
 	"engines": {
 		"node": ">=4.3",
