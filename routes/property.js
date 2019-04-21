@@ -87,8 +87,8 @@ router.post('/:id/room/:room', async (req, res) => {
 		const rooms = await property.get('room');
 		const location = await property.get('location');
 
-		if (rooms[`${room + 1}`].current < rooms[`${room + 1}`].capacity) {
-			rooms[`${room + 1}`].current += 1;
+		if (rooms[`${room - 1}`].current < rooms[`${room - 1}`].capacity) {
+			rooms[`${room - 1}`].current += 1;
 			await property.save({
 				room: rooms
 			});
