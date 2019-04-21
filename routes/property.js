@@ -89,11 +89,9 @@ router.post('/:id/room/:room', async (req, res) => {
 
 		if (rooms[`${room}`].current < rooms[`${room}`].capacity) {
 			rooms[`${room}`].current += 1;
-			rooms[`${room}`].bed.push(user.id);
 			await property.save({
 				room: rooms
 			});
-			sendSMS(name, contact, room, location);
 			sendEmail(name, email, room, location);
 			return res.json({ success: true });
 		}
