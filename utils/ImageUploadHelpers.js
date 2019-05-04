@@ -1,37 +1,21 @@
-const firebase = require('firebase');
-require('firebase/storage');
-const uuidv4 = require('uuid/v4');
-global.XMLHttpRequest = require('xhr2');
-
-const config = {
-	apiKey: process.env.FIRE_API_KEY,
-	authDomain: process.env.FIRE_AUTH_DOMAIN,
-	databaseURL: process.env.FIRE_DATABASE_URL,
-	projectId: process.env.PROJECT_ID,
-	storageBucket: process.env.STORAGE_BUCKET
-};
-firebase.initializeApp(config);
-
-const postToFirebase = async files => {
+const postToGrid = files => {
 	if (files.constructor === Object) {
-		return [await retrieveImageUrl(files.data, files.name.split('.').pop())];
+		return [].push(retrieveImageUrl(files.name, files.data, files.mimetype));
 	} else if (files.constructor === Array) {
 		let imageArray = [];
 		for (let i of files) {
-			imageArray.push(await retrieveImageUrl(i.data, i.name.split('.').pop()));
+			imageArray.push(retrieveImageUrl(files.name, files.data, files.mimetype));
 		}
 		return imageArray;
 	}
 };
 
-const retrieveImageUrl = async (file, extension) => {
-	try {
-		let storageRef = firebase.storage().ref(`images/${uuidv4()}.${extension}`);
-		let data = await storageRef.put(file).then(async () => await storageRef.getDownloadURL());
-		return data;
-	} catch (error) {
-		console.error(error);
-	}
+const retrieveImageUrl = (name, data, mimetype) => {
+	const image = new Parse.File(name, { base64: data.toString('base64') }, mimetype);
+	image
+		.save()
+		.then(upload => upload.url())
+		.catch(error => console.log(error));
 };
 
-module.exports = { postToFirebase };
+module.exports = { postToGrid, retrieveImageUrl };
