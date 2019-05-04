@@ -74,6 +74,8 @@ app.use('/property', require('./routes/property'));
 app.use('/authorities', require('./routes/authorities'));
 app.use('/signOut', require('./routes/signOut'));
 app.use('/resetPassword', require('./routes/resetPassword'));
+app.use('/uploadPhotos', require('./routes/uploadPhotos'));
+app.use('/getCurrentUser', require('./routes/currentUser'));
 
 const port = process.env.PORT || 1337;
 const httpServer = require('http').createServer(app);
