@@ -23,7 +23,7 @@
 		"morgan": "^1.9.1",
 		"parse": "~1.8.0",
 		"parse-dashboard": "",
-		"parse-server": "~2.2.12",
+		"parse-server": "~4.5.2",
 		"paynow": "^1.0.3",
 		"sentry-node": "^2.3.2",
 		"superagent": "^4.1.0",
